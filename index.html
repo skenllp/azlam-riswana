@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Azlam &amp; Riswana — Wedding Invitation</title>
+<meta name="description" content="Request the honour of your gracious presence and blessings at the wedding of Azlam &amp; Riswana.">
+
+<!-- Open Graph / WhatsApp preview -->
+<meta property="og:type"        content="website">
+<meta property="og:url"         content="https://azlam-riswana.vercel.app/">
+<meta property="og:title"       content="Azlam &amp; Riswana — Wedding Invitation">
+<meta property="og:description" content="Request the honour of your gracious presence and blessings at the wedding of Azlam &amp; Riswana — 30 August 2026.">
+<meta property="og:image"       content="https://azlam-riswana.vercel.app/assets/og-image.webp">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type"   content="image/webp">
+<meta property="og:locale"      content="en_IN">
+
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:title"       content="Azlam &amp; Riswana — Wedding Invitation">
+<meta name="twitter:description" content="Request the honour of your gracious presence and blessings at the wedding of Azlam &amp; Riswana — 30 August 2026.">
+<meta name="twitter:image"       content="https://azlam-riswana.vercel.app/assets/og-image.webp">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Self-hosted premium script font — preloaded so the couple's names render
+     correctly on first paint on every device (no external dependency, no FOUT flash) -->
+<link rel="preload" href="assets/fonts/EdwardianScriptITC.woff2" as="font" type="font/woff2" crossorigin>
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Background music (autoplay, loop) -->
+<audio id="bg-music" loop preload="auto">
+  <source src="assets/music.mp3" type="audio/mpeg" />
+</audio>
+
+<!-- Mute / Unmute button — fixed bottom-left, always visible -->
+<button id="mute-btn" class="mute-btn" aria-label="Toggle music" title="Toggle music">
+  <!-- Sound on icon -->
+  <svg id="icon-sound" width="20" height="20" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+  </svg>
+  <!-- Muted icon -->
+  <svg id="icon-muted" width="20" height="20" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       style="display:none;">
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+    <line x1="23" y1="9" x2="17" y2="15"></line>
+    <line x1="17" y1="9" x2="23" y2="15"></line>
+  </svg>
+</button>
+
+<!-- ===================== NOISE / TEXTURE OVERLAY ===================== -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ===================== SCROLL PROGRESS (elegant gold line) ===================== -->
+<div class="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar" id="scrollProgressBar"></div></div>
+
+<!-- ===================== GATE / INTRO SCREEN ===================== -->
+<section id="gate" class="gate" aria-label="Invitation opening screen">
+  <div class="gate__panel gate__panel--left">
+    <svg class="gate__arch" viewBox="0 0 300 800" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M300,800 L300,0 L0,0 L0,500 C0,260 90,90 300,60 Z" fill="rgba(10,6,4,0.92)"/>
+      <path d="M0,500 C0,260 90,90 300,60" fill="none" stroke="var(--gold)" stroke-width="2"/>
+    </svg>
+  </div>
+  <div class="gate__panel gate__panel--right">
+    <svg class="gate__arch" viewBox="0 0 300 800" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,800 L0,0 L300,0 L300,500 C300,260 210,90 0,60 Z" fill="rgba(10,6,4,0.92)"/>
+      <path d="M300,500 C300,260 210,90 0,60" fill="none" stroke="var(--gold)" stroke-width="2"/>
+    </svg>
+  </div>
+
+  <div class="gate__content">
+    <!-- Bismillah sits at the very top of the gate content -->
+    <div class="gate__bismillah" aria-label="In the name of Allah, the Most Gracious, the Most Merciful">
+      <p class="gate__bismillah-arabic" lang="ar" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
+      <p class="gate__bismillah-translit">Bismillahi'r-Rahmani'r-Raheem</p>
+    </div>
+
+    <div class="gate__divider-ornament" aria-hidden="true">
+      <span></span><i></i><span></span>
+    </div>
+
+    <svg class="gate__flourish" viewBox="0 0 120 40" aria-hidden="true">
+      <path d="M0 20 C20 5, 40 35, 60 20 C80 5, 100 35, 120 20" fill="none" stroke="var(--gold)" stroke-width="1"/>
+      <circle cx="60" cy="20" r="2.5" fill="var(--gold)"/>
+    </svg>
+    <p class="gate__eyebrow">The Wedding Of</p>
+    <h1 class="gate__names">Azlam <span class="amp">&amp;</span> Riswana</h1>
+    <p class="gate__date">30<span class="dot">·</span>08<span class="dot">·</span>2026</p>
+    <button id="gateButton" class="gate__button" type="button">
+      <span class="gate__button-ring"></span>
+      <span class="gate__button-label">Open Invitation</span>
+    </button>
+  </div>
+</section>
+
+<!-- ===================== MAIN INVITATION ===================== -->
+<main id="invitation" class="invitation" aria-hidden="true">
+
+  <!-- decorative fixed corner ornaments -->
+  <svg class="corner corner--tl" viewBox="0 0 160 160" aria-hidden="true"><use href="#ornament-corner"/></svg>
+  <svg class="corner corner--br" viewBox="0 0 160 160" aria-hidden="true"><use href="#ornament-corner"/></svg>
+
+  <!-- ============ HERO ============ -->
+  <section class="section hero" id="hero">
+
+    <!-- dark cinematic overlay on top of any future background image -->
+    <div class="hero__overlay" aria-hidden="true"></div>
+
+    <!-- subtle floating gold petals — purely decorative, desktop + mobile -->
+    <div class="hero__petals" aria-hidden="true">
+      <span class="petal petal--1"></span>
+      <span class="petal petal--2"></span>
+      <span class="petal petal--3"></span>
+      <span class="petal petal--4"></span>
+      <span class="petal petal--5"></span>
+    </div>
+
+    <div class="hero__inner reveal">
+
+      <p class="hero__eyebrow">Kindly join us for the Nikkah of</p>
+
+      <h1 class="hero__names">
+        <span class="hero__name-line">Azlam</span>
+        <span class="hero__amp-line">&amp;</span>
+        <span class="hero__name-line">Riswana</span>
+      </h1>
+
+      <p class="hero__meta">August 30, 2026</p>
+
+      <a href="#details" class="hero__cta">View Details</a>
+
+    </div>
+
+    <button class="scroll-cue" id="scrollCue" type="button" aria-label="Scroll to explore">
+      <span class="scroll-cue__line"></span>
+      <span class="scroll-cue__text">Scroll</span>
+    </button>
+  </section>
+
+  <!-- ============ AYAH ============ -->
+  <section class="section ayah" id="ayah">
+    <div class="ayah__frame reveal">
+      <svg class="glyph glyph--star" viewBox="0 0 40 40" aria-hidden="true">
+        <path d="M20 2 L23 17 L38 20 L23 23 L20 38 L17 23 L2 20 L17 17 Z" fill="var(--gold)"/>
+      </svg>
+      <p class="ayah__arabic" lang="ar" dir="rtl">
+        وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُمْ مِنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا
+        وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً
+      </p>
+      <div class="divider divider--small"><span></span><i></i><span></span></div>
+      <p class="ayah__translation">
+        "And among His signs is this: He created for you mates from among yourselves, that you may find
+        tranquility in them, and He placed between you affection and mercy."
+      </p>
+      <p class="ayah__ref">Surah Ar-Rum · 30:21</p>
+    </div>
+  </section>
+
+  <!-- ============ THE COUPLE ============ -->
+  <section class="section couple" id="couple">
+    <div class="couple__head reveal">
+      <p class="eyebrow">Brought Together by Faith &amp; Family</p>
+      <h2 class="section-title">The Couple</h2>
+      <div class="divider divider--small"><span></span><i></i><span></span></div>
+    </div>
+
+    <div class="couple__grid reveal">
+
+      <!-- Groom -->
+      <article class="couple-card couple-card--groom">
+        <div class="couple-card__badge">
+          <svg viewBox="0 0 60 60" aria-hidden="true" width="42" height="42">
+            <circle cx="30" cy="20" r="10" fill="none" stroke="var(--gold)" stroke-width="1.5"/>
+            <path d="M14 50 C14 36 46 36 46 50" fill="none" stroke="var(--gold)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <p class="couple-card__role">Groom</p>
+        <h3 class="couple-card__name">Azlam</h3>
+        <div class="divider divider--small"><span></span><i></i><span></span></div>
+        <p class="couple-card__relation">Son of</p>
+        <p class="couple-card__parents">Mr. Shaji K H &amp; Mrs. Safeena Shaji</p>
+        <p class="couple-card__address">Kaniyamkuzhi House, Kuttamassery<br>Aluva</p>
+        <!-- <p class="couple-card__contact">8136945123 &nbsp;·&nbsp; 7592844564</p> -->
+      </article>
+
+      <!-- Centre ornament -->
+      <div class="couple__sep" aria-hidden="true">
+        <span class="couple__sep-line"></span>
+        <svg class="couple__sep-icon" viewBox="0 0 40 40" width="32" height="32">
+          <path d="M20 2 L23 17 L38 20 L23 23 L20 38 L17 23 L2 20 L17 17 Z" fill="var(--gold)"/>
+        </svg>
+        <span class="couple__sep-line"></span>
+      </div>
+
+      <!-- Bride -->
+      <article class="couple-card couple-card--bride">
+        <div class="couple-card__badge">
+          <svg viewBox="0 0 60 60" aria-hidden="true" width="42" height="42">
+            <circle cx="30" cy="18" r="9" fill="none" stroke="var(--gold)" stroke-width="1.5"/>
+            <path d="M16 50 C16 36 44 36 44 50" fill="none" stroke="var(--gold)" stroke-width="1.5"/>
+            <path d="M22 32 Q30 40 38 32" fill="none" stroke="var(--gold-soft)" stroke-width="1"/>
+          </svg>
+        </div>
+        <p class="couple-card__role">Bride</p>
+        <h3 class="couple-card__name">Riswana</h3>
+        <div class="divider divider--small"><span></span><i></i><span></span></div>
+        <p class="couple-card__relation">Daughter of</p>
+        <p class="couple-card__parents">Mr. Ibrahim K M &amp; Mrs. Asma Beevi</p>
+        <p class="couple-card__address">Kannankeri House, Chittethukara<br>Kakkanad</p>
+      </article>
+
+    </div>
+  </section>
+  <section class="section story" id="story">
+    <div class="story__inner reveal">
+
+      <!-- Medallion: petals rotate independently, initials stay upright -->
+      <div class="medallion" role="img" aria-label="Azlam and Riswana floral monogram">
+
+        <!-- Static rings — never move -->
+        <svg class="medallion__rings" viewBox="0 0 320 320" aria-hidden="true">
+          <!-- outer fine ring -->
+          <circle cx="160" cy="160" r="154" fill="none" stroke="var(--gold-pale)" stroke-width=".8"/>
+          <!-- double gold ring pair -->
+          <circle cx="160" cy="160" r="146" fill="none" stroke="var(--gold)" stroke-width="1.2"/>
+          <circle cx="160" cy="160" r="140" fill="none" stroke="var(--gold-soft)" stroke-width=".6"/>
+          <!-- inner accent ring -->
+          <circle cx="160" cy="160" r="82" fill="none" stroke="var(--gold-pale)" stroke-width=".8"/>
+        </svg>
+
+        <!-- Rotating petals only -->
+        <svg class="medallion__petals-svg" viewBox="0 0 320 320" aria-hidden="true">
+          <g class="medallion__petals">
+            <path d="M160 60 C182 95 182 125 160 148 C138 125 138 95 160 60Z"  fill="var(--emerald)" opacity="0.88"/>
+            <path d="M160 60 C182 95 182 125 160 148 C138 125 138 95 160 60Z"  fill="var(--emerald)" opacity="0.88" transform="rotate(60 160 160)"/>
+            <path d="M160 60 C182 95 182 125 160 148 C138 125 138 95 160 60Z"  fill="var(--emerald)" opacity="0.88" transform="rotate(120 160 160)"/>
+            <path d="M160 60 C182 95 182 125 160 148 C138 125 138 95 160 60Z"  fill="var(--emerald)" opacity="0.88" transform="rotate(180 160 160)"/>
+            <path d="M160 60 C182 95 182 125 160 148 C138 125 138 95 160 60Z"  fill="var(--emerald)" opacity="0.88" transform="rotate(240 160 160)"/>
+            <path d="M160 60 C182 95 182 125 160 148 C138 125 138 95 160 60Z"  fill="var(--emerald)" opacity="0.88" transform="rotate(300 160 160)"/>
+          </g>
+        </svg>
+
+        <!-- Static initials — always centered, never rotate -->
+        <svg class="medallion__initials-svg" viewBox="0 0 320 320" aria-hidden="true">
+          <text x="160" y="168" text-anchor="middle" class="medallion__text">A &amp; R</text>
+        </svg>
+
+      </div>
+
+      <!-- Corner accent lines -->
+      <div class="story__corners" aria-hidden="true">
+        <svg class="story__corner story__corner--tl" viewBox="0 0 40 40"><path d="M38 2 L2 2 L2 38" fill="none" stroke="var(--gold)" stroke-width="1"/><path d="M34 2 L2 2 L2 34" fill="none" stroke="var(--gold-pale)" stroke-width=".5"/></svg>
+        <svg class="story__corner story__corner--tr" viewBox="0 0 40 40"><path d="M2 2 L38 2 L38 38" fill="none" stroke="var(--gold)" stroke-width="1"/><path d="M6 2 L38 2 L38 34" fill="none" stroke="var(--gold-pale)" stroke-width=".5"/></svg>
+        <svg class="story__corner story__corner--bl" viewBox="0 0 40 40"><path d="M38 38 L2 38 L2 2" fill="none" stroke="var(--gold)" stroke-width="1"/><path d="M34 38 L2 38 L2 6" fill="none" stroke="var(--gold-pale)" stroke-width=".5"/></svg>
+        <svg class="story__corner story__corner--br" viewBox="0 0 40 40"><path d="M2 38 L38 38 L38 2" fill="none" stroke="var(--gold)" stroke-width="1"/><path d="M6 38 L38 38 L38 6" fill="none" stroke="var(--gold-pale)" stroke-width=".5"/></svg>
+      </div>
+
+      <h2 class="story__title">Two Families, One Blessing</h2>
+      <p class="story__text">
+        With hearts full of gratitude, the families of Azlam and Riswana joyfully come
+        together to begin this new chapter, In Sha' Allah. Surrounded by the love and blessings of
+        both families, they warmly invite you to be part of their Nikkah and the celebrations that follow.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ============ DETAILS + COUNTDOWN ============ -->
+  <section class="section details" id="details">
+    <div class="details__head reveal">
+      <p class="eyebrow">Save The Date</p>
+      <h2 class="section-title">The Celebration</h2>
+      <div class="divider divider--small"><span></span><i></i><span></span></div>
+    </div>
+
+    <div class="celebration-card reveal">
+
+      <!-- Corner accent lines — matches the medallion section for a cohesive luxury frame -->
+      <div class="celebration-card__corners" aria-hidden="true">
+        <svg class="celebration-card__corner celebration-card__corner--tl" viewBox="0 0 40 40"><path d="M38 2 L2 2 L2 38" fill="none" stroke="var(--gold)" stroke-width="1"/><path d="M34 2 L2 2 L2 34" fill="none" stroke="var(--gold-pale)" stroke-width=".5"/></svg>
+        <svg class="celebration-card__corner celebration-card__corner--tr" viewBox="0 0 40 40"><path d="M2 2 L38 2 L38 38" fill="none" stroke="var(--gold)" stroke-width="1"/><path d="M6 2 L38 2 L38 34" fill="none" stroke="var(--gold-pale)" stroke-width=".5"/></svg>
+        <svg class="celebration-card__corner celebration-card__corner--bl" viewBox="0 0 40 40"><path d="M38 38 L2 38 L2 2" fill="none" stroke="var(--gold)" stroke-width="1"/><path d="M34 38 L2 38 L2 6" fill="none" stroke="var(--gold-pale)" stroke-width=".5"/></svg>
+        <svg class="celebration-card__corner celebration-card__corner--br" viewBox="0 0 40 40"><path d="M2 38 L38 38 L38 2" fill="none" stroke="var(--gold)" stroke-width="1"/><path d="M6 38 L38 38 L38 6" fill="none" stroke="var(--gold-pale)" stroke-width=".5"/></svg>
+      </div>
+
+      <svg class="celebration-card__icon" viewBox="0 0 60 60" aria-hidden="true">
+        <path d="M30 8 L34 26 L52 30 L34 34 L30 52 L26 34 L8 30 L26 26 Z" fill="none" stroke="var(--gold)" stroke-width="1.5"/>
+      </svg>
+
+      <p class="celebration-card__label">Reception Ceremony</p>
+      <p class="celebration-card__date">Sunday, 30 August 2026</p>
+      <p class="celebration-card__time">6:00 PM Onwards</p>
+
+      <div class="divider divider--small"><span></span><i></i><span></span></div>
+
+      <p class="celebration-card__venue">Convensia Convention Center, Kuttamassery</p>
+
+      <div class="countdown" id="countdown" aria-live="polite">
+        <p class="countdown__label">Counting Down To The Reception</p>
+        <div class="countdown__grid">
+          <div class="countdown__unit">
+            <span class="countdown__num" id="cd-days">00</span>
+            <span class="countdown__word">Days</span>
+          </div>
+          <div class="countdown__unit">
+            <span class="countdown__num" id="cd-hours">00</span>
+            <span class="countdown__word">Hours</span>
+          </div>
+          <div class="countdown__unit">
+            <span class="countdown__num" id="cd-mins">00</span>
+            <span class="countdown__word">Minutes</span>
+          </div>
+          <div class="countdown__unit">
+            <span class="countdown__num" id="cd-secs">00</span>
+            <span class="countdown__word">Seconds</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ VENUE ============ -->
+  <section class="section venue" id="venue">
+    <div class="venue__head reveal">
+      <p class="eyebrow">Join Us At</p>
+      <h2 class="section-title">Convensia Convention Center</h2>
+      <div class="venue__pin">
+        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" fill="none" stroke="var(--gold)" stroke-width="1.6"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>
+        <p class="venue__address">Kuttamassery, Kerala</p>
+      </div>
+      <div class="divider divider--small"><span></span><i></i><span></span></div>
+    </div>
+
+    <div class="venue__map reveal">
+      <div class="venue__map-frame">
+        <!-- Embedded map centered on the venue location shared via Google Maps.
+             Loaded eagerly (not lazy) so it never silently fails to appear. -->
+        <iframe
+          title="Map to Convensia Convention Center, Kuttamassery"
+          src="https://www.google.com/maps?q=10.1204492,76.3894066&z=16&output=embed"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen>
+        </iframe>
+        <div class="venue__map-glow" aria-hidden="true"></div>
+      </div>
+      <p class="venue__map-fallback">
+        Map not loading? <a href="https://maps.app.goo.gl/b3BrcxfqXB3TynZp6?g_st=iw" target="_blank" rel="noopener">Open the location directly</a>.
+      </p>
+    </div>
+
+    <div class="venue__actions reveal">
+      <a class="button button--outline" href="https://maps.app.goo.gl/b3BrcxfqXB3TynZp6?g_st=iw" target="_blank" rel="noopener">
+        <svg class="button__icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>
+        Get Directions
+      </a>
+      <a class="button button--ghost" href="https://maps.app.goo.gl/b3BrcxfqXB3TynZp6?g_st=iw" target="_blank" rel="noopener">
+        Open in Google Maps
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ GALLERY (illustrated, not photographic) ============ -->
+  <!-- <section class="section gallery" id="gallery">
+    <div class="gallery__head reveal">
+      <p class="eyebrow">A Glimpse</p>
+      <h2 class="section-title">Little Tokens of the Day</h2>
+    </div>
+    <div class="gallery__grid">
+      <figure class="gallery__item reveal">
+        <svg viewBox="0 0 300 380" aria-hidden="true">
+          <rect width="300" height="380" fill="var(--paper-deep)"/>
+          <path d="M40 300 C60 200 90 140 150 100 C210 140 240 200 260 300" fill="none" stroke="var(--emerald)" stroke-width="2"/>
+          <circle cx="150" cy="90" r="14" fill="var(--gold)"/>
+          <path d="M40 300 L260 300" stroke="var(--gold-soft)" stroke-width="1"/>
+        </svg>
+        <figcaption>The Arch We'll Stand Beneath</figcaption>
+      </figure>
+      <figure class="gallery__item reveal">
+        <svg viewBox="0 0 300 380" aria-hidden="true">
+          <rect width="300" height="380" fill="var(--paper-deep)"/>
+          <g fill="none" stroke="var(--gold)" stroke-width="1.5">
+            <path d="M150 60 C190 100 190 160 150 200 C110 160 110 100 150 60Z"/>
+            <path d="M150 60 C190 100 190 160 150 200 C110 160 110 100 150 60Z" transform="rotate(72 150 130)"/>
+            <path d="M150 60 C190 100 190 160 150 200 C110 160 110 100 150 60Z" transform="rotate(144 150 130)"/>
+            <path d="M150 60 C190 100 190 160 150 200 C110 160 110 100 150 60Z" transform="rotate(216 150 130)"/>
+            <path d="M150 60 C190 100 190 160 150 200 C110 160 110 100 150 60Z" transform="rotate(288 150 130)"/>
+          </g>
+          <line x1="150" y1="220" x2="150" y2="320" stroke="var(--emerald)" stroke-width="2"/>
+        </svg>
+        <figcaption>Marigold &amp; Jasmine</figcaption>
+      </figure>
+      <figure class="gallery__item reveal">
+        <svg viewBox="0 0 300 380" aria-hidden="true">
+          <rect width="300" height="380" fill="var(--paper-deep)"/>
+          <rect x="70" y="90" width="160" height="200" fill="none" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="150" y="200" text-anchor="middle" class="gallery__monogram">S&amp;F</text>
+          <rect x="82" y="102" width="136" height="176" fill="none" stroke="var(--gold-soft)" stroke-width="1"/>
+        </svg>
+        <figcaption>The Invitation Seal</figcaption>
+      </figure>
+      <figure class="gallery__item reveal">
+        <svg viewBox="0 0 300 380" aria-hidden="true">
+          <rect width="300" height="380" fill="var(--paper-deep)"/>
+          <path d="M60 320 Q150 40 240 320" fill="none" stroke="var(--emerald)" stroke-width="2"/>
+          <path d="M90 320 Q150 120 210 320" fill="none" stroke="var(--gold)" stroke-width="1.5"/>
+          <circle cx="150" cy="110" r="6" fill="var(--gold)"/>
+        </svg>
+        <figcaption>The Garden Lanterns</figcaption>
+      </figure>
+    </div>
+  </section> -->
+
+  <!-- ============ CLOSING / FOOTER ============ -->
+  <footer class="section footer" id="footer">
+    <div class="footer__inner reveal">
+      <svg class="glyph glyph--star" viewBox="0 0 40 40" aria-hidden="true">
+        <path d="M20 2 L23 17 L38 20 L23 23 L20 38 L17 23 L2 20 L17 17 Z" fill="var(--gold)"/>
+      </svg>
+      <h2 class="footer__names">Azlam <span class="amp">&amp;</span> Riswana</h2>
+      <p class="footer__date">30 · 08 · 2026</p>
+      <p class="footer__dua">"Our Lord, grant us from among our spouses comfort to our eyes, and make us a
+        model for the righteous." <span class="footer__dua-ref">— Al-Furqan 25:74</span></p>
+      <div class="divider divider--small"><span></span><i></i><span></span></div>
+      <p class="footer__note">Sharing the Happiness<br>Relatives &amp; Friends</p>
+    </div>
+  </footer>
+
+</main>
+
+<!-- reusable svg defs -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="ornament-corner">
+      <path d="M10 150 C10 60 60 10 150 10" fill="none" stroke="var(--gold)" stroke-width="1"/>
+      <path d="M10 120 C10 75 75 10 120 10" fill="none" stroke="var(--gold-soft)" stroke-width="1"/>
+      <circle cx="10" cy="150" r="3" fill="var(--gold)"/>
+      <circle cx="150" cy="10" r="3" fill="var(--gold)"/>
+    </g>
+  </defs>
+</svg>
+
+<script src="js/script.js"></script>
+</body>
+</html>
