@@ -69,21 +69,38 @@
 
 <!-- ===================== GATE / INTRO SCREEN ===================== -->
 <section id="gate" class="gate" aria-label="Invitation opening screen">
+
+  <!-- Gold particle canvas — sits behind everything -->
+  <canvas id="gateCanvas" class="gate__canvas" aria-hidden="true"></canvas>
+
+  <!-- Parallax depth layer — moves with mouse -->
+  <div class="gate__parallax" id="gateParallax" aria-hidden="true"></div>
+
+  <!-- Left door panel -->
   <div class="gate__panel gate__panel--left">
     <svg class="gate__arch" viewBox="0 0 300 800" preserveAspectRatio="none" aria-hidden="true">
       <path d="M300,800 L300,0 L0,0 L0,500 C0,260 90,90 300,60 Z" fill="rgba(10,6,4,0.92)"/>
       <path d="M0,500 C0,260 90,90 300,60" fill="none" stroke="var(--gold)" stroke-width="2"/>
+      <!-- animated shimmer line -->
+      <line class="gate__shimmer" x1="260" y1="0" x2="260" y2="800" stroke="rgba(203,169,104,0.18)" stroke-width="1"/>
+      <line class="gate__shimmer gate__shimmer--2" x1="240" y1="0" x2="240" y2="800" stroke="rgba(203,169,104,0.10)" stroke-width="1"/>
     </svg>
   </div>
+
+  <!-- Right door panel -->
   <div class="gate__panel gate__panel--right">
     <svg class="gate__arch" viewBox="0 0 300 800" preserveAspectRatio="none" aria-hidden="true">
       <path d="M0,800 L0,0 L300,0 L300,500 C300,260 210,90 0,60 Z" fill="rgba(10,6,4,0.92)"/>
       <path d="M300,500 C300,260 210,90 0,60" fill="none" stroke="var(--gold)" stroke-width="2"/>
+      <!-- animated shimmer line -->
+      <line class="gate__shimmer" x1="40" y1="0" x2="40" y2="800" stroke="rgba(203,169,104,0.18)" stroke-width="1"/>
+      <line class="gate__shimmer gate__shimmer--2" x1="60" y1="0" x2="60" y2="800" stroke="rgba(203,169,104,0.10)" stroke-width="1"/>
     </svg>
   </div>
 
   <div class="gate__content">
-    <!-- Bismillah sits at the very top of the gate content -->
+
+    <!-- Bismillah -->
     <div class="gate__bismillah" aria-label="In the name of Allah, the Most Gracious, the Most Merciful">
       <p class="gate__bismillah-arabic" lang="ar" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
       <p class="gate__bismillah-translit">Bismillahi'r-Rahmani'r-Raheem</p>
@@ -93,17 +110,37 @@
       <span></span><i></i><span></span>
     </div>
 
-    <svg class="gate__flourish" viewBox="0 0 120 40" aria-hidden="true">
-      <path d="M0 20 C20 5, 40 35, 60 20 C80 5, 100 35, 120 20" fill="none" stroke="var(--gold)" stroke-width="1"/>
-      <circle cx="60" cy="20" r="2.5" fill="var(--gold)"/>
+    <!-- Animated SVG flourish — draws itself in -->
+    <svg class="gate__flourish" viewBox="0 0 200 50" aria-hidden="true">
+      <path class="gate__flourish-path" d="M10 25 C30 8, 55 42, 80 25 C105 8, 120 42, 145 25 C165 8, 180 42, 190 25"
+            fill="none" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round"/>
+      <circle class="gate__flourish-dot" cx="100" cy="25" r="3" fill="var(--gold)"/>
+      <circle class="gate__flourish-dot" cx="40"  cy="28" r="1.8" fill="var(--gold-soft)" opacity="0.7"/>
+      <circle class="gate__flourish-dot" cx="160" cy="28" r="1.8" fill="var(--gold-soft)" opacity="0.7"/>
     </svg>
+
     <p class="gate__eyebrow">The Wedding Of</p>
-    <h1 class="gate__names">Azlam <span class="amp">&amp;</span> Riswana</h1>
-    <p class="gate__date">30<span class="dot">·</span>08<span class="dot">·</span>2026</p>
+
+    <!-- Names split into letter spans for stagger animation -->
+    <h1 class="gate__names" aria-label="Azlam and Riswana">
+      <span class="gate__name-word" id="gateName1" aria-hidden="true"></span>
+      <span class="gate__amp gate__amp--animate" aria-hidden="true">&amp;</span>
+      <span class="gate__name-word" id="gateName2" aria-hidden="true"></span>
+    </h1>
+
+    <p class="gate__date">
+      <span class="gate__date-seg">30</span><span class="dot">·</span><span class="gate__date-seg">08</span><span class="dot">·</span><span class="gate__date-seg">2026</span>
+    </p>
+
     <button id="gateButton" class="gate__button" type="button">
       <span class="gate__button-ring"></span>
+      <span class="gate__button-ring gate__button-ring--2"></span>
       <span class="gate__button-label">Open Invitation</span>
     </button>
+
+    <!-- Mobile tap hint -->
+    <p class="gate__tap-hint" aria-hidden="true">tap to open</p>
+
   </div>
 </section>
 

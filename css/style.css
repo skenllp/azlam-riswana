@@ -123,7 +123,7 @@ img, svg{ display: block; max-width: 100%; }
 .amp{ font-family: var(--font-script); font-style: italic; color: var(--gold); font-size: .8em; padding: 0 .12em; }
 
 /* ============================================================
-   GATE BISMILLAH (integrated into the intro screen)
+   GATE BISMILLAH
    ============================================================ */
 .gate__bismillah{
   margin: 0 0 .4rem;
@@ -135,11 +135,11 @@ img, svg{ display: block; max-width: 100%; }
 .gate__bismillah-arabic{
   font-family: var(--font-arabic);
   font-size: clamp(2rem, 7vw, 3.4rem);
-  color: var(--gold-soft);
+  color: #f0d898;
   margin: 0;
   letter-spacing: .04em;
   line-height: 1.3;
-  text-shadow: 0 0 32px rgba(169,129,47,.6), 0 2px 8px rgba(0,0,0,.4);
+  text-shadow: 0 0 40px rgba(169,129,47,.7), 0 2px 12px rgba(0,0,0,.5);
 }
 
 .gate__bismillah-translit{
@@ -151,7 +151,7 @@ img, svg{ display: block; max-width: 100%; }
   margin: 0;
 }
 
-/* thin ornamental divider between bismillah and the names */
+/* ornamental divider */
 .gate__divider-ornament{
   display: flex; align-items: center; justify-content: center;
   gap: .5em; width: min(160px, 50%); margin: .5rem auto .6rem;
@@ -171,124 +171,280 @@ img, svg{ display: block; max-width: 100%; }
 }
 
 @keyframes gate-bismillah-enter{
-  0%{
-    opacity: 0;
-    transform: translateY(-14px) scale(.94);
-    letter-spacing: .3em;
-  }
-  60%{
-    opacity: 1;
-    transform: translateY(2px) scale(1.02);
-  }
-  100%{
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  0%  { opacity: 0; transform: translateY(-14px) scale(.94); }
+  60% { opacity: 1; transform: translateY(2px) scale(1.02); }
+  100%{ opacity: 1; transform: translateY(0) scale(1); }
 }
 @keyframes gate-fade-up{
-  from{ opacity: 0; transform: translateY(8px); }
-  to{ opacity: 1; transform: translateY(0); }
+  from{ opacity: 0; transform: translateY(10px); }
+  to  { opacity: 1; transform: translateY(0); }
 }
 
 /* ============================================================
-   GATE / INTRO
+   GATE / INTRO — container
    ============================================================ */
 .gate{
   position: fixed; inset: 0; z-index: 100;
   display: flex; align-items: center; justify-content: center;
-  background-color: #0d0d0d;
+  background-color: #0a0705;
   background-image:
-    linear-gradient(to bottom, rgba(0,0,0,.35) 0%, rgba(0,0,0,.15) 40%, rgba(0,0,0,.5) 100%),
+    linear-gradient(to bottom, rgba(0,0,0,.15) 0%, rgba(0,0,0,.05) 40%, rgba(0,0,0,.2) 100%),
     url('../assets/Background.webp');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  /* no opacity transition — we handle exit via the blur layer below */
-  transition: opacity 1.2s var(--ease);
+  overflow: hidden;
+  transition: opacity 1.4s var(--ease);
 }
 .gate.is-open{ pointer-events: none; opacity: 0; }
 
-/* Blur layer — sits above bg image, below panels & content */
+/* Blur layer */
 .gate::before{
   content: '';
   position: absolute; inset: 0; z-index: 0;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  background: rgba(0,0,0,.18);
-  transition: opacity 1s var(--ease);
+  background: rgba(0,0,0,.2);
+  transition: opacity 1.1s var(--ease);
 }
-/* When gate starts opening, dissolve blur so image sharpens as panels slide */
-.gate.is-open::before{
+.gate.is-open::before{ opacity: 0; }
+.gate.is-open::after { opacity: 0; transition: opacity 1.1s var(--ease); }
+
+/* Dark fade overlay — animates in as texts appear */
+.gate::after{
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.55) 0%, rgba(0,0,0,.32) 40%, rgba(0,0,0,.62) 100%),
+    radial-gradient(ellipse at center, transparent 20%, rgba(0,0,0,.38) 100%);
   opacity: 0;
+  animation: gate-overlay-fade 2.2s var(--ease) 0.3s forwards;
+}
+@keyframes gate-overlay-fade{
+  from{ opacity: 0; }
+  to  { opacity: 1; }
 }
 
+/* ---- particle canvas ---- */
+.gate__canvas{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---- parallax depth layer ---- */
+.gate__parallax{
+  position: absolute; inset: -30px;   /* oversized so edges stay hidden while shifting */
+  background-image:
+    url('../assets/Background.webp');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  opacity: 0;                          /* fade in after load */
+  transition: opacity 1.8s var(--ease);
+  will-change: transform;
+}
+.gate__parallax.is-ready{ opacity: 1; }
+
+/* ---- door panels ---- */
 .gate__panel{
   position: absolute; top: 0; bottom: 0; width: 51%;
-  transition: transform 1.3s var(--ease);
-  z-index: 1;
+  transition: transform 1.4s cubic-bezier(.76,0,.24,1);
+  z-index: 2;
+  overflow: hidden;
 }
 .gate__panel--left{ left: 0; }
 .gate__panel--right{ right: 0; }
 .gate__arch{ width: 100%; height: 100%; }
 
-.gate.is-open .gate__panel--left{ transform: translateX(-105%); }
+.gate.is-open .gate__panel--left { transform: translateX(-105%); }
 .gate.is-open .gate__panel--right{ transform: translateX(105%); }
 
-.gate__content{
-  position: relative; z-index: 2;
-  text-align: center; padding: 2rem;
-  transition: opacity .6s var(--ease), transform .6s var(--ease);
+/* shimmer lines on panels */
+.gate__shimmer{
+  stroke-dasharray: 200 600;
+  stroke-dashoffset: 600;
+  animation: shimmer-fall 4s ease-in-out infinite;
 }
-.gate.is-open .gate__content{ opacity: 0; transform: translateY(-16px); }
+.gate__shimmer--2{
+  animation-delay: 1.8s;
+  animation-duration: 5.5s;
+}
+@keyframes shimmer-fall{
+  0%  { stroke-dashoffset: 600; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100%{ stroke-dashoffset: -600; opacity: 0; }
+}
 
+/* ---- main content ---- */
+.gate__content{
+  position: relative; z-index: 3;
+  text-align: center; padding: 2rem;
+  transition: opacity .7s var(--ease), transform .7s var(--ease);
+}
+.gate.is-open .gate__content{ opacity: 0; transform: translateY(-20px); }
+
+/* ---- self-drawing flourish ---- */
 .gate__flourish{
-  width: 90px; margin: 0 auto 1.2rem; opacity: 0;
+  width: 140px; margin: 0 auto 1rem; opacity: 0;
   animation: gate-fade-up 1s var(--ease) 1.4s forwards;
 }
-
-.gate__eyebrow{
-  font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: .35em; text-transform: uppercase;
-  font-size: .82rem; color: rgba(255,255,255,.85); margin: 0 0 .8em;
-  opacity: 0;
-  animation: gate-fade-up 1s var(--ease) 1.6s forwards;
+.gate__flourish-path{
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  animation: draw-path 1.8s var(--ease) 1.5s forwards;
 }
+.gate__flourish-dot{
+  opacity: 0;
+  animation: gate-fade-up .5s var(--ease) 3.1s forwards;
+}
+@keyframes draw-path{
+  to{ stroke-dashoffset: 0; }
+}
+
+/* ---- eyebrow ---- */
+.gate__eyebrow{
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: .38em; text-transform: uppercase;
+  font-size: .82rem; color: rgba(255,255,255,.8); margin: 0 0 .6em;
+  opacity: 0;
+  animation: gate-fade-up 1s var(--ease) 1.7s forwards;
+}
+
+/* ---- names with letter stagger ---- */
 .gate__names{
   font-family: var(--font-script-hero); font-weight: 400;
   font-size: clamp(3.6rem, 12vw, 6rem);
   line-height: 1.5;
-  color: #fff; margin: 0 0 .3em;
+  color: #fff; margin: 0 0 .25em;
   letter-spacing: 0;
-  text-shadow: 0 2px 24px rgba(0,0,0,.6), 0 0 60px rgba(180,120,60,.2);
-  opacity: 0;
-  animation: gate-fade-up 1s var(--ease) 1.8s forwards;
+  display: flex; align-items: baseline; justify-content: center;
+  flex-wrap: wrap; gap: 0 .3em;
 }
+
+/* each letter injected by JS */
+.gate__letter{
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(22px) rotate(-4deg);
+  animation: letter-land 0.55s cubic-bezier(.22,.61,.36,1) forwards;
+  text-shadow:
+    0 2px 24px rgba(0,0,0,.6),
+    0 0 50px rgba(180,120,60,.25);
+  will-change: transform, opacity;
+}
+@keyframes letter-land{
+  0%  { opacity: 0; transform: translateY(22px) rotate(-4deg); }
+  60% { opacity: 1; transform: translateY(-4px) rotate(1deg); }
+  100%{ opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+
+/* the & between names */
+.gate__amp--animate{
+  font-family: var(--font-script-hero);
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  color: var(--gold-soft);
+  opacity: 0;
+  display: inline-block;
+  text-shadow: 0 0 30px rgba(203,169,104,.5);
+  animation: gate-fade-up .7s var(--ease) 2.5s forwards;
+  line-height: 1.5;
+}
+
+/* heartbeat on names after fully loaded */
+.gate__names.is-beating{
+  animation: name-heartbeat 3.2s ease-in-out 3.4s infinite;
+}
+@keyframes name-heartbeat{
+  0%,100%{ text-shadow: 0 2px 24px rgba(0,0,0,.6), 0 0 50px rgba(180,120,60,.2); }
+  50%     { text-shadow: 0 2px 24px rgba(0,0,0,.6), 0 0 90px rgba(203,169,104,.45); }
+}
+
+/* ---- date ---- */
 .gate__date{
-  font-family: 'Playfair Display', Georgia, serif; letter-spacing: .28em; font-size: 1rem;
+  font-family: 'Playfair Display', Georgia, serif;
+  letter-spacing: .3em; font-size: 1rem;
   color: rgba(255,255,255,.85); margin: 0 0 2rem;
   opacity: 0;
-  animation: gate-fade-up 1s var(--ease) 2s forwards;
+  animation: gate-fade-up 1s var(--ease) 2.8s forwards;
 }
+.gate__date-seg{
+  display: inline-block;
+  transition: color .3s;
+}
+.gate__date-seg:hover{ color: var(--gold-soft); }
 .gate__date .dot{ color: var(--gold-soft); margin: 0 .4em; }
 
+/* ---- button ---- */
 .gate__button{
-  position: relative;
-  font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: .22em; text-transform: uppercase;
+  position: relative; overflow: hidden;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: .24em; text-transform: uppercase;
   font-size: .96rem; color: #fff;
-  background: transparent; border: 1px solid rgba(255,255,255,.65);
-  padding: 1.1rem 2.8rem; cursor: pointer;
-  transition: color .4s var(--ease), background .4s var(--ease), border-color .4s var(--ease);
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.6);
+  padding: 1.1rem 3rem; cursor: pointer;
+  transition: color .4s var(--ease), background .4s var(--ease), border-color .4s var(--ease), box-shadow .4s var(--ease);
   opacity: 0;
-  animation: gate-fade-up 1s var(--ease) 2.2s forwards;
+  animation: gate-fade-up 1s var(--ease) 3s forwards;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
-.gate__button:hover{ background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.9); }
+.gate__button:hover{
+  background: rgba(255,255,255,.12);
+  border-color: var(--gold-soft);
+  color: var(--gold-soft);
+  box-shadow: 0 0 28px rgba(203,169,104,.25), inset 0 0 20px rgba(203,169,104,.05);
+}
+
+/* dual pulse rings */
 .gate__button-ring{
-  position: absolute; inset: -6px; border: 1px solid rgba(255,255,255,.2);
-  animation: pulse-ring 2.6s ease-in-out infinite;
+  position: absolute; inset: -7px;
+  border: 1px solid rgba(255,255,255,.18);
   pointer-events: none;
+  animation: pulse-ring 2.8s ease-in-out infinite;
+}
+.gate__button-ring--2{
+  inset: -14px;
+  border-color: rgba(203,169,104,.12);
+  animation-delay: 1.4s;
 }
 @keyframes pulse-ring{
-  0%,100%{ opacity: .5; transform: scale(1); }
-  50%{ opacity: 0; transform: scale(1.08); }
+  0%,100%{ opacity: .6; transform: scale(1); }
+  50%     { opacity: 0; transform: scale(1.1); }
+}
+
+/* ripple element injected by JS */
+.gate__ripple{
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(203,169,104,.35);
+  transform: scale(0);
+  animation: ripple-expand .7s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes ripple-expand{
+  to{ transform: scale(4); opacity: 0; }
+}
+
+/* ---- tap hint (mobile only) ---- */
+.gate__tap-hint{
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: .72rem; letter-spacing: .3em; text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+  margin: 1.4rem 0 0;
+  opacity: 0;
+  animation: gate-fade-up 1s var(--ease) 3.4s forwards, tap-blink 2.4s ease-in-out 4s infinite;
+}
+@keyframes tap-blink{
+  0%,100%{ opacity: .35; }
+  50%     { opacity: .08; }
+}
+@media (min-width: 641px){
+  .gate__tap-hint{ display: none; }
 }
 
 /* ============================================================
@@ -1043,17 +1199,16 @@ a:focus-visible, button:focus-visible{
   .mute-btn{ animation: none; }
 }
 
-/* ---------- RESPONSIVE TWEAKS ---------- */
+/* ---------- RESPONSIVE TWEAKS (legacy — kept for non-gate elements) ---------- */
 @media (max-width: 480px){
-  .gate__names{ font-size: 2.6rem; }
   .section{ padding-inline: 1.2rem; }
   .venue__map-frame iframe{ height: 240px; }
-  .hero__name-line{ font-size: 3rem; }
-  .hero__amp-line{ font-size: 2rem; }
+  .hero__name-line{ font-size: clamp(2.8rem, 10vw, 3.8rem); }
+  .hero__amp-line { font-size: clamp(1.8rem, 6.5vw, 2.4rem); }
   .venue__actions{ flex-direction: column; align-items: center; gap: .7rem; }
   .venue__actions .button, .venue__actions .button--ghost{ width: 100%; max-width: 280px; text-align: center; }
   .countdown__grid{ padding: 1.2rem .8rem; }
-  .countdown__unit{ min-width: 56px; }
+  .countdown__unit{ min-width: 52px; }
 }
 
 @media (max-width: 340px){
@@ -1062,7 +1217,6 @@ a:focus-visible, button:focus-visible{
 }
 
 @media (max-height: 700px){
-  /* Short viewport — compress hero further */
   .hero__name-line{ font-size: clamp(2.6rem, 9vw, 5rem); }
   .hero__amp-line{ font-size: clamp(1.8rem, 5vw, 3rem); }
   .hero__meta{ margin-bottom: 1.2em; }
@@ -1115,4 +1269,145 @@ a:focus-visible, button:focus-visible{
 /* Respect reduced-motion preference */
 @media (prefers-reduced-motion: reduce) {
   .floating-flowers { display: none; }
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVE — Gate + full site
+   ========================================================================== */
+
+/* ---- Gate: tablets and below (≤ 768px) ---- */
+@media (max-width: 768px){
+
+  .gate__content{
+    padding: 1.4rem 1.2rem;
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  .gate__bismillah-arabic{
+    font-size: clamp(1.7rem, 6.5vw, 2.6rem);
+  }
+  .gate__bismillah-translit{
+    letter-spacing: .18em;
+    font-size: .72rem;
+  }
+
+  .gate__amp--animate{
+    font-size: clamp(2rem, 7vw, 3.2rem);
+  }
+
+  .gate__date{
+    font-size: .88rem;
+    letter-spacing: .22em;
+    margin-bottom: 1.4rem;
+  }
+
+  .gate__button{
+    padding: 1rem 2.2rem;
+    font-size: .9rem;
+  }
+  .gate__button-ring   { inset: -5px; }
+  .gate__button-ring--2{ inset: -10px; }
+
+  .gate__flourish{ width: 110px; margin-bottom: .7rem; }
+  .gate__divider-ornament{ margin: .3rem auto .4rem; }
+  .gate__bismillah{ margin-bottom: .2rem; }
+}
+
+/* ---- Gate: phones (≤ 480px) ---- */
+@media (max-width: 480px){
+
+  .gate__content{
+    padding: 1rem .8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gate__bismillah{ gap: .2rem; margin-bottom: .15rem; }
+  .gate__bismillah-arabic{
+    font-size: clamp(1.45rem, 7.5vw, 2rem);
+  }
+  .gate__bismillah-translit{
+    font-size: .66rem;
+    letter-spacing: .14em;
+  }
+
+  .gate__divider-ornament{ margin: .2rem auto .3rem; width: min(120px, 40%); }
+  .gate__flourish{ width: 90px; margin-bottom: .5rem; }
+  .gate__eyebrow{ font-size: .72rem; letter-spacing: .28em; margin-bottom: .4em; }
+
+  .gate__names{
+    font-size: clamp(2.6rem, 11vw, 3.4rem);
+    gap: 0 .2em;
+    margin-bottom: .15em;
+    line-height: 1.4;
+  }
+  .gate__amp--animate{
+    font-size: clamp(1.8rem, 7.5vw, 2.6rem);
+    line-height: 1.4;
+  }
+
+  .gate__date{
+    font-size: .82rem;
+    letter-spacing: .18em;
+    margin-bottom: 1.2rem;
+  }
+
+  .gate__button{
+    padding: .9rem 2rem;
+    font-size: .84rem;
+    letter-spacing: .2em;
+  }
+  .gate__button-ring   { inset: -4px; }
+  .gate__button-ring--2{ inset: -8px; }
+
+  .gate__tap-hint{ margin-top: 1rem; font-size: .66rem; }
+}
+
+/* ---- Very small phones (≤ 360px) ---- */
+@media (max-width: 360px){
+
+  .gate__bismillah-arabic{ font-size: clamp(1.2rem, 7vw, 1.6rem); }
+  .gate__bismillah-translit{ font-size: .6rem; letter-spacing: .1em; }
+  .gate__names{ font-size: clamp(2.2rem, 10.5vw, 3rem); }
+  .gate__amp--animate{ font-size: clamp(1.6rem, 7vw, 2.2rem); }
+  .gate__button{ padding: .8rem 1.6rem; font-size: .8rem; }
+  .gate__flourish{ width: 75px; }
+}
+
+/* ---- Short-viewport phones (e.g. iPhone SE, Galaxy S small) ---- */
+@media (max-height: 680px){
+
+  .gate__content{ padding: .7rem .8rem; }
+  .gate__bismillah{ margin-bottom: .1rem; gap: .15rem; }
+  .gate__bismillah-arabic{ font-size: clamp(1.3rem, 5vw, 1.9rem); }
+  .gate__divider-ornament{ margin: .15rem auto .2rem; }
+  .gate__flourish{ width: 80px; margin-bottom: .35rem; }
+  .gate__eyebrow{ margin-bottom: .3em; font-size: .7rem; }
+  .gate__names{ line-height: 1.25; margin-bottom: .1em; }
+  .gate__date{ margin-bottom: .9rem; font-size: .78rem; }
+  .gate__button{ padding: .8rem 1.8rem; }
+  .gate__tap-hint{ margin-top: .7rem; }
+}
+
+/* ---- Landscape phones — gate scrollable when too short ---- */
+@media (max-height: 500px) and (orientation: landscape){
+
+  .gate{
+    align-items: flex-start;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .gate__content{
+    padding: .5rem 1.2rem 1.2rem;
+    min-height: 100%;
+  }
+  .gate__bismillah-arabic{ font-size: 1.2rem; }
+  .gate__flourish{ display: none; }
+  .gate__names{ font-size: clamp(2rem, 8vw, 3rem); line-height: 1.2; }
+  .gate__amp--animate{ font-size: clamp(1.5rem, 5vw, 2rem); }
+  .gate__date{ margin-bottom: .8rem; }
+  .gate__button{ padding: .7rem 1.8rem; }
 }

@@ -283,3 +283,207 @@ function initFloatingFlowers() {
 }
 
 document.addEventListener("DOMContentLoaded", initFloatingFlowers);
+
+/* ==========================================================================
+   Gate — Interactive enhancements
+   · Letter-by-letter name stagger
+   · Mouse / touch parallax on the background layer
+   · Gold particle canvas (twinkling stars)
+   · Button click ripple
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ------------------------------------------------------------------
+     1. LETTER STAGGER — split "Azlam" and "Riswana" into individual
+        <span class="gate__letter"> elements and animate each in with
+        a cascading delay.
+  ------------------------------------------------------------------ */
+  function buildLetters(containerId, word, baseDelay) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = "";
+    for (var i = 0; i < word.length; i++) {
+      var span = document.createElement("span");
+      span.className = "gate__letter";
+      span.textContent = word[i] === " " ? "\u00A0" : word[i];
+      // stagger: each letter 60 ms after the previous
+      var delay = baseDelay + i * 0.06;
+      span.style.animationDelay = delay.toFixed(2) + "s";
+      el.appendChild(span);
+    }
+  }
+
+  // name 1 starts at 1.9 s, name 2 starts at 2.6 s
+  buildLetters("gateName1", "Azlam",   1.9);
+  buildLetters("gateName2", "Riswana", 2.6);
+
+  // After all letters have landed, add the subtle heartbeat glow
+  var namesEl = document.querySelector(".gate__names");
+  if (namesEl && !reduced) {
+    window.setTimeout(function () {
+      namesEl.classList.add("is-beating");
+    }, 4000);
+  }
+
+  /* ------------------------------------------------------------------
+     2. MOUSE / TOUCH PARALLAX — the .gate__parallax layer shifts
+        subtly opposite to cursor position, giving a 3-D depth feel.
+  ------------------------------------------------------------------ */
+  var parallaxLayer = document.getElementById("gateParallax");
+  var gate          = document.getElementById("gate");
+
+  if (parallaxLayer && gate && !reduced) {
+    // Reveal the parallax layer once page is loaded
+    window.setTimeout(function () {
+      parallaxLayer.classList.add("is-ready");
+    }, 600);
+
+    var tX = 0, tY = 0;   // target offsets
+    var cX = 0, cY = 0;   // current (lerped) offsets
+    var rafId = null;
+    var MAX   = 14;        // max pixel shift
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    function tickParallax() {
+      cX = lerp(cX, tX, 0.06);
+      cY = lerp(cY, tY, 0.06);
+      parallaxLayer.style.transform =
+        "translate3d(" + cX.toFixed(2) + "px," + cY.toFixed(2) + "px,0)";
+      rafId = requestAnimationFrame(tickParallax);
+    }
+    rafId = requestAnimationFrame(tickParallax);
+
+    function onMouseMove(e) {
+      var cx = window.innerWidth  / 2;
+      var cy = window.innerHeight / 2;
+      tX = ((e.clientX - cx) / cx) * -MAX;
+      tY = ((e.clientY - cy) / cy) * -MAX;
+    }
+
+    function onTouchMove(e) {
+      if (!e.touches.length) return;
+      var cx = window.innerWidth  / 2;
+      var cy = window.innerHeight / 2;
+      tX = ((e.touches[0].clientX - cx) / cx) * -(MAX * 0.5);
+      tY = ((e.touches[0].clientY - cy) / cy) * -(MAX * 0.5);
+    }
+
+    gate.addEventListener("mousemove",  onMouseMove,  { passive: true });
+    gate.addEventListener("touchmove",  onTouchMove,  { passive: true });
+
+    // stop the RAF once gate is opened to save resources
+    var gateBtn = document.getElementById("gateButton");
+    if (gateBtn) {
+      gateBtn.addEventListener("click", function () {
+        cancelAnimationFrame(rafId);
+        gate.removeEventListener("mousemove", onMouseMove);
+        gate.removeEventListener("touchmove",  onTouchMove);
+      }, { once: true });
+    }
+  }
+
+  /* ------------------------------------------------------------------
+     3. GOLD PARTICLE CANVAS — tiny glowing gold dots that twinkle
+        independently, layered behind the content.
+  ------------------------------------------------------------------ */
+  var canvas = document.getElementById("gateCanvas");
+  if (canvas && !reduced) {
+    var ctx    = canvas.getContext("2d");
+    var COLORS = ["rgba(203,169,104,", "rgba(231,216,174,", "rgba(169,129,47,"];
+    var particles = [];
+    var animFrameId;
+
+    function resizeCanvas() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas, { passive: true });
+
+    // spawn a single particle at a random position
+    function makeParticle() {
+      return {
+        x:       Math.random() * canvas.width,
+        y:       Math.random() * canvas.height,
+        r:       0.6 + Math.random() * 1.8,        // radius 0.6–2.4 px
+        alpha:   0,
+        maxAlpha:0.25 + Math.random() * 0.55,
+        speed:   0.004 + Math.random() * 0.008,    // fade speed
+        phase:   Math.random() * Math.PI * 2,      // sine offset
+        color:   COLORS[Math.floor(Math.random() * COLORS.length)]
+      };
+    }
+
+    // populate: fewer on mobile
+    var COUNT = window.innerWidth < 640 ? 55 : window.innerWidth < 1024 ? 90 : 140;
+    for (var i = 0; i < COUNT; i++) {
+      var p = makeParticle();
+      p.phase = Math.random() * Math.PI * 2;       // scatter phases so they don't all pulse together
+      particles.push(p);
+    }
+
+    function drawParticles(time) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var t = time * 0.001;
+      for (var j = 0; j < particles.length; j++) {
+        var pt = particles[j];
+        // sine-driven alpha gives a natural twinkle
+        pt.alpha = pt.maxAlpha * (0.5 + 0.5 * Math.sin(t * pt.speed * 60 + pt.phase));
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pt.r, 0, Math.PI * 2);
+        ctx.fillStyle = pt.color + pt.alpha.toFixed(3) + ")";
+        ctx.fill();
+
+        // occasional soft glow halo on larger particles
+        if (pt.r > 1.4) {
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, pt.r * 2.8, 0, Math.PI * 2);
+          ctx.fillStyle = pt.color + (pt.alpha * 0.18).toFixed(3) + ")";
+          ctx.fill();
+        }
+      }
+      animFrameId = requestAnimationFrame(drawParticles);
+    }
+    animFrameId = requestAnimationFrame(drawParticles);
+
+    // stop canvas when gate closes
+    var gateBtnForCanvas = document.getElementById("gateButton");
+    if (gateBtnForCanvas) {
+      gateBtnForCanvas.addEventListener("click", function () {
+        window.setTimeout(function () {
+          cancelAnimationFrame(animFrameId);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }, 1600);
+      }, { once: true });
+    }
+  }
+
+  /* ------------------------------------------------------------------
+     4. BUTTON RIPPLE — on click, inject a .gate__ripple element that
+        expands outward from the exact click/touch point.
+  ------------------------------------------------------------------ */
+  var gateButtonEl = document.getElementById("gateButton");
+  if (gateButtonEl && !reduced) {
+    gateButtonEl.addEventListener("click", function (e) {
+      var rect   = gateButtonEl.getBoundingClientRect();
+      var size   = Math.max(rect.width, rect.height);
+      var x      = (e.clientX || rect.left + rect.width  / 2) - rect.left - size / 2;
+      var y      = (e.clientY || rect.top  + rect.height / 2) - rect.top  - size / 2;
+      var ripple = document.createElement("span");
+      ripple.className = "gate__ripple";
+      ripple.style.cssText =
+        "width:" + size + "px;height:" + size + "px;left:" + x + "px;top:" + y + "px;";
+      gateButtonEl.appendChild(ripple);
+      // clean up after animation
+      window.setTimeout(function () {
+        if (ripple.parentNode) ripple.parentNode.removeChild(ripple);
+      }, 750);
+    });
+  }
+
+}());
