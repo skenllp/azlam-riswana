@@ -545,6 +545,17 @@ img, svg{ display: block; max-width: 100%; }
   text-align: center;
 }
 
+/* Bismillah — minimal, above eyebrow in hero */
+.hero__bismillah{
+  font-family: var(--font-arabic);
+  font-size: clamp(1.1rem, 3.2vw, 1.55rem);
+  color: rgba(240, 216, 152, 0.72);
+  margin: 0 0 .9em;
+  letter-spacing: .03em;
+  line-height: 1.4;
+  text-shadow: 0 0 22px rgba(169,129,47,.3);
+}
+
 /* eyebrow — small spaced caps, white */
 .hero__eyebrow{
   font-family: 'Cormorant Garamond', Georgia, serif;
