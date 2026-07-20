@@ -1068,3 +1068,51 @@ a:focus-visible, button:focus-visible{
   .hero__meta{ margin-bottom: 1.2em; }
   .scroll-cue{ bottom: 1rem; }
 }
+
+/* ==========================================================================
+   Floating Flowers — full-viewport falling petal overlay
+   ========================================================================== */
+
+/* Container — fixed so it stays visible on scroll */
+.floating-flowers {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;   /* never blocks clicks on content below */
+  z-index: 350;           /* above page sections, below modals/overlays */
+}
+
+/* Individual petal wrapper */
+.flower-petal {
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation-name: petalFall;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.flower-petal svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Fall keyframes — gentle diagonal drift from top to bottom */
+@keyframes petalFall {
+  0%   { transform: translate3d(0,      -10vh, 0) rotate(0deg);   opacity: 0; }
+  8%   { opacity: var(--op, 0.7); }
+  25%  { transform: translate3d(18px,    25vh, 0) rotate(90deg); }
+  50%  { transform: translate3d(-16px,   50vh, 0) rotate(180deg); }
+  75%  { transform: translate3d(16px,    75vh, 0) rotate(270deg); }
+  92%  { opacity: calc(var(--op, 0.7) * 0.6); }
+  100% { transform: translate3d(-12px,  112vh, 0) rotate(360deg); opacity: 0; }
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .floating-flowers { display: none; }
+}
