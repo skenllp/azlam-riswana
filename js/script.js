@@ -215,6 +215,109 @@
     });
   }
 
+  /* ---------- Guest personalisation (?guest=Name in URL) ---------- */
+  /*
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var raw    = params.get("guest") || "";
+
+    // Sanitise: strip all HTML tags, trim whitespace, cap at 60 chars
+    var name = raw.replace(/<[^>]*>/g, "").trim().slice(0, 60);
+    if (!name) return;
+
+    var el = document.getElementById("heroGuest");
+    if (!el) return;
+
+    // Capitalise first letter of each word nicely
+    name = name.replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+
+    el.innerHTML =
+      "Dear <span class=\"hero__guest-name\">" + name + "</span>," +
+      "<br>you are cordially invited.";
+    el.classList.add("is-visible");
+  }());
+  */
+
+  /* ---------- RSVP — attendance toggle, counter, WhatsApp redirect ---------- */
+  (function () {
+    var form      = document.getElementById("rsvpForm");
+    if (!form) return;
+
+    var btnYes    = document.getElementById("btnYes");
+    var btnNo     = document.getElementById("btnNo");
+    var minusBtn  = document.getElementById("rsvpMinus");
+    var plusBtn   = document.getElementById("rsvpPlus");
+    var countEl   = document.getElementById("rsvpCount");
+    var nameEl    = document.getElementById("rsvpName");
+    var msgEl     = document.getElementById("rsvpMessage");
+    var WA_NUMBER = "916235440983"; // no + sign for wa.me links
+
+    // ---- attendance toggle ----
+    function setAttendance(attending) {
+      btnYes.classList.toggle("is-selected",  attending);
+      btnNo.classList.toggle("is-selected",  !attending);
+      btnYes.querySelector("input").checked =  attending;
+      btnNo.querySelector("input").checked  = !attending;
+    }
+    setAttendance(true); // default: yes
+
+    btnYes.addEventListener("click", function () { setAttendance(true);  });
+    btnNo.addEventListener("click",  function () { setAttendance(false); });
+
+    // ---- counter ----
+    minusBtn.addEventListener("click", function () {
+      var v = parseInt(countEl.value, 10);
+      if (v > 1) countEl.value = v - 1;
+    });
+    plusBtn.addEventListener("click", function () {
+      var v = parseInt(countEl.value, 10);
+      if (v < 10) countEl.value = v + 1;
+    });
+
+    // ---- submit → WhatsApp ----
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      // validate name
+      var name = nameEl.value.trim();
+      if (!name) {
+        nameEl.classList.add("is-error");
+        nameEl.focus();
+        return;
+      }
+      nameEl.classList.remove("is-error");
+
+      var attending = btnYes.classList.contains("is-selected");
+      var count     = parseInt(countEl.value, 10) || 1;
+      var message   = msgEl ? msgEl.value.trim() : "";
+
+      // build the WhatsApp message
+      var lines = [];
+      lines.push("Assalamu Alaikum \uD83C\uDF39");
+      lines.push("");
+      lines.push("*Azlam & Riswana — Wedding RSVP*");
+      lines.push("");
+      lines.push("*Name:* " + name);
+      lines.push("*Attendance:* " + (attending ? "\u2705 Joyfully Accepts" : "\u274C Regretfully Declines"));
+      if (attending) {
+        lines.push("*Number of Guests:* " + count);
+      }
+      if (message) {
+        lines.push("*Message:* " + message);
+      }
+      lines.push("");
+      lines.push("_Sent from the wedding invitation_");
+
+      var text = encodeURIComponent(lines.join("\n"));
+      window.open("https://wa.me/" + WA_NUMBER + "?text=" + text, "_blank");
+    });
+
+    // clear error state on input
+    nameEl.addEventListener("input", function () {
+      nameEl.classList.remove("is-error");
+    });
+  }());
+
 })();
 
 /* ==========================================================================

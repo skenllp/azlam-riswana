@@ -605,6 +605,30 @@ img, svg{ display: block; max-width: 100%; }
   margin: .6em 0 1.8em;
 }
 
+/* guest personalisation greeting */
+.hero__guest{
+  display: none;                        /* hidden until JS injects a name */
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1rem, 2.6vw, 1.25rem);
+  color: rgba(255,255,255,.82);
+  letter-spacing: .04em;
+  margin: 0 0 1.6em;
+  line-height: 1.6;
+  text-shadow: 0 1px 10px rgba(0,0,0,.4);
+  animation: guest-fade-in .9s var(--ease) .4s both;
+}
+.hero__guest.is-visible{ display: block; }
+.hero__guest-name{
+  color: #f0d898;                       /* matches the Bismillah gold */
+  font-style: normal;
+  font-weight: 500;
+}
+@keyframes guest-fade-in{
+  from{ opacity: 0; transform: translateY(8px); }
+  to  { opacity: 1; transform: translateY(0); }
+}
+
 /* CTA button — outlined, white */
 .hero__cta{
   display: inline-block;
@@ -1232,6 +1256,169 @@ a:focus-visible, button:focus-visible{
   .hero__amp-line{ font-size: clamp(1.8rem, 5vw, 3rem); }
   .hero__meta{ margin-bottom: 1.2em; }
   .scroll-cue{ bottom: 1rem; }
+}
+
+/* ==========================================================================
+   RSVP Section
+   ========================================================================== */
+.rsvp{
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(203,169,104,.07) 0%, transparent 65%),
+    var(--paper);
+}
+
+.rsvp__sub{
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  color: var(--ink-soft);
+  margin: .4em 0 0;
+  max-width: 38ch;
+  margin-inline: auto;
+  line-height: 1.7;
+}
+
+/* ---- form card ---- */
+.rsvp__form{
+  max-width: 480px;
+  margin: 2rem auto 0;
+  padding: clamp(2rem, 6vw, 3rem) clamp(1.4rem, 5vw, 2.6rem);
+  background:
+    linear-gradient(160deg, var(--paper-deep), var(--paper) 70%);
+  border: 1px solid var(--gold-pale);
+  box-shadow: 0 24px 60px -30px rgba(36,50,42,.28);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ---- attendance toggle ---- */
+.rsvp__attendance{
+  border: none; margin: 0; padding: 0;
+  display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap;
+}
+.rsvp__attendance-legend{
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: .2em; text-transform: uppercase;
+  font-size: .72rem; color: var(--gold);
+  width: 100%; text-align: center;
+  margin-bottom: .8rem;
+}
+.rsvp__attend-btn{
+  display: flex; align-items: center; gap: .55rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: .96rem; letter-spacing: .04em;
+  color: var(--ink-soft);
+  border: 1px solid var(--gold-pale);
+  padding: .65rem 1.3rem;
+  cursor: pointer;
+  transition: all .3s var(--ease);
+  user-select: none;
+  flex: 1 1 auto; justify-content: center;
+  min-width: 150px;
+}
+.rsvp__attend-btn input[type="radio"]{ position: absolute; opacity: 0; pointer-events: none; }
+
+.rsvp__attend-btn.is-selected{
+  background: var(--emerald-deep);
+  border-color: var(--emerald-deep);
+  color: var(--paper);
+}
+.rsvp__attend-btn.is-selected .rsvp__attend-icon{ color: var(--gold-soft); }
+
+.rsvp__attend-icon{
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  flex-shrink: 0;
+  transition: all .3s var(--ease);
+}
+.rsvp__attend-btn.is-selected .rsvp__attend-icon{
+  border-color: var(--gold-soft);
+  background: rgba(203,169,104,.15);
+}
+
+/* ---- fields ---- */
+.rsvp__field{
+  display: flex; flex-direction: column; gap: .5rem; text-align: left;
+}
+.rsvp__label{
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: .78rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.rsvp__optional{
+  font-size: .72rem; letter-spacing: .1em; color: var(--gold-soft); text-transform: none;
+}
+.rsvp__input{
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem; color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--gold-pale);
+  padding: .75rem 1rem;
+  outline: none;
+  transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
+  width: 100%;
+}
+.rsvp__input:focus{
+  border-color: var(--gold-soft);
+  box-shadow: 0 0 0 3px rgba(203,169,104,.15);
+}
+.rsvp__input.is-error{ border-color: #c0392b; box-shadow: 0 0 0 3px rgba(192,57,43,.12); }
+.rsvp__textarea{ resize: vertical; min-height: 80px; line-height: 1.6; }
+
+/* ---- guest counter ---- */
+.rsvp__counter{
+  display: flex; align-items: stretch; border: 1px solid var(--gold-pale);
+  background: var(--paper); max-width: 160px;
+}
+.rsvp__counter-btn{
+  width: 44px; background: none; border: none;
+  font-size: 1.3rem; color: var(--gold);
+  cursor: pointer; transition: background .25s var(--ease);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.rsvp__counter-btn:hover{ background: rgba(203,169,104,.12); }
+.rsvp__counter-btn:active{ background: rgba(203,169,104,.22); }
+.rsvp__counter-input{
+  flex: 1; border: none; border-left: 1px solid var(--gold-pale); border-right: 1px solid var(--gold-pale);
+  text-align: center; font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem; color: var(--emerald-deep);
+  background: transparent; outline: none; padding: .6rem 0;
+  -moz-appearance: textfield;
+}
+.rsvp__counter-input::-webkit-outer-spin-button,
+.rsvp__counter-input::-webkit-inner-spin-button{ -webkit-appearance: none; }
+
+/* ---- submit button ---- */
+.rsvp__submit{
+  display: flex; align-items: center; justify-content: center; gap: .7rem;
+  width: 100%;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: .22em; text-transform: uppercase;
+  font-size: .92rem; color: var(--paper);
+  background: var(--emerald-deep);
+  border: 1px solid var(--emerald-deep);
+  padding: 1.1rem 2rem;
+  cursor: pointer;
+  transition: background .35s var(--ease), box-shadow .35s var(--ease), transform .2s var(--ease);
+}
+.rsvp__submit:hover{
+  background: #163020;
+  box-shadow: 0 8px 28px -10px rgba(36,50,42,.5);
+  transform: translateY(-2px);
+}
+.rsvp__submit:active{ transform: translateY(0); }
+.rsvp__submit svg{ flex-shrink: 0; }
+
+/* mobile */
+@media (max-width: 480px){
+  .rsvp__form{ padding: 1.6rem 1.1rem; gap: 1.2rem; }
+  .rsvp__attend-btn{ min-width: 130px; padding: .6rem 1rem; font-size: .9rem; }
+  .rsvp__counter{ max-width: 140px; }
 }
 
 /* ==========================================================================
